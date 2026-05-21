@@ -326,7 +326,18 @@
       .hero-ctas{flex-direction:column} .hero-ctas .btn{width:100%;justify-content:center}
       .counters-grid{grid-template-columns:1fr}
     }
-  </style>
+  
+    /* ── LIBRO DE RECLAMACIONES ── */
+    .reclamaciones-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:22px;padding:14px 16px;border-radius:var(--radius-sm);border:1px solid rgba(192,57,43,.35);background:rgba(192,57,43,.08);flex-wrap:wrap}
+    .reclamaciones-left{display:flex;align-items:center;gap:10px}
+    .reclamaciones-ico{width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#c0392b,#922b21);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem}
+    .reclamaciones-title{font-family:var(--font-body);font-size:.78rem;color:var(--white);font-weight:600;line-height:1.2}
+    .reclamaciones-legal{font-size:.6rem;color:rgba(255,255,255,.38);margin-top:2px}
+    .btn-reclamaciones{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#c0392b,#922b21);color:#fff;font-family:var(--font-body);font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;border-radius:var(--radius-xs);text-decoration:none;transition:all .22s;box-shadow:0 2px 10px rgba(192,57,43,.25);white-space:nowrap}
+    .btn-reclamaciones:hover{background:linear-gradient(135deg,#cd3e2f,#a93226);transform:translateY(-1px);box-shadow:0 5px 16px rgba(192,57,43,.4)}
+    @media(max-width:640px){.reclamaciones-bar{flex-direction:column;align-items:flex-start}.btn-reclamaciones{width:100%;justify-content:center}}
+
+    </style>
 </head>
 <body>
 
@@ -699,6 +710,10 @@
   </div>
 </section>
 
+
+
+
+
 <footer id="footer" role="contentinfo">
   <div class="container">
     <div class="footer-grid">
@@ -712,6 +727,20 @@
           <a href="https://twitter.com/" target="_blank" rel="noopener" class="footer-social" aria-label="X"><i class="fab fa-x-twitter"></i></a>
           <a href="https://www.youtube.com/" target="_blank" rel="noopener" class="footer-social" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
           <a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="footer-social" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <!-- Libro de Reclamaciones -->
+        <div class="reclamaciones-bar">
+          <div class="reclamaciones-left">
+            <div class="reclamaciones-ico"><i class="fas fa-book-open" style="color:#fff"></i></div>
+            <div>
+              <div class="reclamaciones-title">Libro de Reclamaciones</div>
+              <div class="reclamaciones-legal">Ley N° 29571 · D.S. N° 011-2011-PCM</div>
+            </div>
+          </div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeTz-29ttxgsBqfBpnpNZLJj7z6jLOOXz3LhDjlAXe7UOc4UA/viewform"
+             target="_blank" rel="noopener noreferrer" class="btn-reclamaciones">
+            <i class="fas fa-pen"></i> Registrar reclamo
+          </a>
         </div>
       </div>
       <div class="footer-col"><h4>Servicios</h4><ul class="footer-links"><li><a href="#services">Certificaciones</a></li><li><a href="#services">Autorización de viaje</a></li><li><a href="#services">Poderes</a></li><li><a href="#services">Inmuebles</a></li><li><a href="#services">Empresas</a></li><li><a href="#services">Testamento</a></li><li><a href="#services">Junta Gral. Accionistas</a></li><li><a href="#services">Cartas notariales</a></li></ul></div>
@@ -732,6 +761,7 @@
     </div>
   </div>
 </footer>
+
 
 <a href="https://wa.link/lf9x6u" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
   <i class="fab fa-whatsapp"></i>

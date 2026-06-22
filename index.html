@@ -793,6 +793,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
 <!-- ══ CHATBOT NOTARÍA (widget oficial n8n) ══ -->
 <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 <style>
+  /* ── Variables del chat ── */
   :root {
     --chat--color-primary: #c49a3c;
     --chat--color-primary-shade-50: #b88f35;
@@ -807,74 +808,180 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     --chat--color-dark: #0f1318;
     --chat--color-disabled: #7d7870;
     --chat--color-typing: #2b3a52;
-
     --chat--spacing: 1rem;
     --chat--border-radius: 0.75rem;
-    --chat--transition-duration: 0.2s;
-
+    --chat--transition-duration: 0.25s;
     --chat--window--width: 380px;
-    --chat--window--height: 600px;
-
+    --chat--window--height: 580px;
     --chat--header-height: auto;
     --chat--header--padding: 1.2rem;
-    --chat--header--background: linear-gradient(135deg, #0f1318, #1c2331);
+    --chat--header--background: linear-gradient(135deg, #0f1318 0%, #1c2331 100%);
     --chat--header--color: #ffffff;
     --chat--header--border-top: none;
     --chat--header--border-bottom: 2px solid #c49a3c;
-    --chat--heading--font-size: 1.1rem;
-    --chat--subtitle--font-size: 0.8rem;
+    --chat--heading--font-size: 1.05rem;
+    --chat--subtitle--font-size: 0.78rem;
     --chat--subtitle--line-height: 1.6;
-
     --chat--textarea--height: 50px;
-
-    --chat--message--font-size: 0.9rem;
+    --chat--message--font-size: 0.88rem;
     --chat--message--padding: 0.85rem 1.1rem;
     --chat--message--border-radius: 0.75rem;
-    --chat--message-line-height: 1.5;
+    --chat--message-line-height: 1.55;
     --chat--message--bot--background: #ffffff;
     --chat--message--bot--color: #3a3630;
     --chat--message--bot--border: 1px solid #e8e4dc;
     --chat--message--user--background: linear-gradient(135deg, #2b3a52, #1c2331);
     --chat--message--user--color: #ffffff;
     --chat--message--user--border: none;
-    --chat--message--pre--background: rgba(15, 19, 24, 0.05);
-
+    --chat--message--pre--background: rgba(15,19,24,.05);
     --chat--toggle--background: linear-gradient(135deg, #c49a3c, #d4b060);
     --chat--toggle--hover--background: #b88f35;
     --chat--toggle--active--background: #a8822f;
     --chat--toggle--color: #0f1318;
-    --chat--toggle--size: 60px;
-  }
-  /* Fuentes acordes a la web */
-  #n8n-chat, #n8n-chat * {
-    font-family: 'Jost', sans-serif;
-  }
-  #n8n-chat .chat-heading {
-    font-family: 'Playfair Display', Georgia, serif;
+    --chat--toggle--size: 56px;
   }
 
-  /* Reposicionar botón del chat n8n para no tapar WhatsApp */
-  #n8n-chat .chat-window-toggle,
-  #n8n-chat .chat-window-wrapper .chat-window-toggle {
-    bottom: 6rem !important;
-    right: 2rem !important;
-  }
-  /* La ventana del chat también sube para no chocar */
+  /* ── Tipografía del chat ── */
+  #n8n-chat, #n8n-chat * { font-family: 'Jost', sans-serif; }
+  #n8n-chat .chat-heading { font-family: 'Playfair Display', Georgia, serif; }
+
+  /* ── Ocultar el toggle nativo de n8n (usamos el nuestro) ── */
+  #n8n-chat .chat-window-toggle { display: none !important; }
+
+  /* ── Ventana del chat: posición y animación ── */
   #n8n-chat .chat-window {
-    bottom: 6rem !important;
+    position: fixed !important;
+    bottom: 7rem !important;
     right: 2rem !important;
+    border-radius: 1.1rem !important;
+    box-shadow: 0 12px 48px rgba(0,0,0,.32), 0 2px 8px rgba(196,154,60,.18) !important;
+    border: 1px solid rgba(196,154,60,.22) !important;
+    overflow: hidden !important;
+    transform-origin: bottom right !important;
+    animation: chatSlideIn .32s cubic-bezier(.34,1.56,.64,1) both !important;
   }
+  @keyframes chatSlideIn {
+    from { opacity:0; transform:scale(.85) translateY(16px); }
+    to   { opacity:1; transform:scale(1)  translateY(0); }
+  }
+
+  /* Responsive */
   @media(max-width:480px){
-    #n8n-chat .chat-window-toggle {
-      bottom: 5.5rem !important;
-      right: 1rem !important;
-    }
     #n8n-chat .chat-window {
-      bottom: 5.5rem !important;
-      right: 0.75rem !important;
+      right: 0.6rem !important;
+      bottom: 6.5rem !important;
+      --chat--window--width: calc(100vw - 1.2rem);
     }
+  }
+
+  /* ── Botón toggle personalizado ── */
+  #chat-toggle-btn {
+    position: fixed;
+    bottom: 6rem; /* encima del botón WhatsApp (2rem) + 56px + 0.5rem gap */
+    right: 2rem;
+    z-index: 1100;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #c49a3c 0%, #d4b060 100%);
+    box-shadow: 0 4px 18px rgba(196,154,60,.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
+    outline: none;
+    animation: btnAppear .6s cubic-bezier(.34,1.56,.64,1) .4s both;
+  }
+  @keyframes btnAppear {
+    from { opacity:0; transform:scale(.5); }
+    to   { opacity:1; transform:scale(1); }
+  }
+  #chat-toggle-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 6px 28px rgba(196,154,60,.72);
+  }
+  #chat-toggle-btn:active { transform: scale(.95); }
+
+  /* Icono dentro del botón */
+  #chat-toggle-btn .cb-icon {
+    position: absolute;
+    display: flex; align-items:center; justify-content:center;
+    transition: opacity .18s ease, transform .18s ease;
+    color: #0f1318;
+    font-size: 1.45rem;
+  }
+  #chat-toggle-btn .cb-icon-open  { opacity:1; transform:scale(1) rotate(0deg); }
+  #chat-toggle-btn .cb-icon-close { opacity:0; transform:scale(.5) rotate(-90deg); font-size:1.25rem; }
+  #chat-toggle-btn.is-open .cb-icon-open  { opacity:0; transform:scale(.5) rotate(90deg); }
+  #chat-toggle-btn.is-open .cb-icon-close { opacity:1; transform:scale(1) rotate(0deg); }
+
+  /* Ping pulsante cuando está cerrado */
+  #chat-toggle-btn::before {
+    content:'';
+    position:absolute; inset:-4px;
+    border-radius:50%;
+    background: rgba(196,154,60,.22);
+    animation: ctPulse 2.6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  #chat-toggle-btn.is-open::before { animation:none; opacity:0; }
+  @keyframes ctPulse {
+    0%,100%{ transform:scale(1);   opacity:.7; }
+    50%    { transform:scale(1.25);opacity:0; }
+  }
+
+  /* Tooltip */
+  #chat-toggle-btn::after {
+    content: attr(data-tip);
+    position:absolute;
+    right: 68px; top:50%; transform:translateY(-50%);
+    background: #0f1318;
+    color: #fff;
+    font-family: 'Jost', sans-serif;
+    font-size: .72rem; font-weight:600;
+    white-space:nowrap;
+    padding:.42rem .85rem;
+    border-radius:.4rem;
+    border:1px solid rgba(196,154,60,.25);
+    opacity:0; pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  #chat-toggle-btn:hover::after { opacity:1; }
+  #chat-toggle-btn.is-open::after { content:'Cerrar asistente'; }
+
+  /* Notificación badge */
+  #chat-badge {
+    position:absolute;
+    top:-4px; right:-4px;
+    width:18px; height:18px;
+    background:#e63946;
+    border-radius:50%;
+    border:2px solid #fff;
+    font-size:.6rem; font-weight:700; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    animation:badgePop .4s cubic-bezier(.34,1.56,.64,1) 1.8s both;
+    pointer-events:none;
+  }
+  @keyframes badgePop {
+    from{opacity:0;transform:scale(0);}
+    to{opacity:1;transform:scale(1);}
+  }
+  #chat-badge.hidden { display:none; }
+
+  /* Mobile */
+  @media(max-width:480px){
+    #chat-toggle-btn { right:.9rem; bottom:5.8rem; }
   }
 </style>
+
+<!-- Botón personalizado -->
+<button id="chat-toggle-btn" data-tip="Asistente virtual" aria-label="Abrir asistente virtual" aria-expanded="false">
+  <span class="cb-icon cb-icon-open"><i class="fas fa-comment-dots"></i></span>
+  <span class="cb-icon cb-icon-close"><i class="fas fa-times"></i></span>
+  <span id="chat-badge">1</span>
+</button>
 
 <script type="module">
   import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
@@ -899,6 +1006,52 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
       }
     }
   });
+
+  // Control manual del toggle
+  const btn   = document.getElementById('chat-toggle-btn');
+  const badge = document.getElementById('chat-badge');
+
+  function getChatWindow() {
+    return document.querySelector('#n8n-chat .chat-window');
+  }
+  function getNativeToggle() {
+    return document.querySelector('#n8n-chat .chat-window-toggle, #n8n-chat button[class*="toggle"]');
+  }
+
+  let isOpen = false;
+
+  function openChat() {
+    const native = getNativeToggle();
+    // Usamos el toggle nativo de n8n si está disponible; de lo contrario forzamos visibilidad
+    if (native) native.click();
+    else {
+      const win = getChatWindow();
+      if (win) { win.style.display = ''; win.style.visibility = 'visible'; }
+    }
+    isOpen = true;
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded','true');
+    badge.classList.add('hidden');
+  }
+
+  function closeChat() {
+    const native = getNativeToggle();
+    if (native) native.click();
+    else {
+      const win = getChatWindow();
+      if (win) win.style.display = 'none';
+    }
+    isOpen = false;
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded','false');
+  }
+
+  btn.addEventListener('click', () => {
+    if (isOpen) closeChat(); else openChat();
+  });
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen) closeChat(); });
 </script>
 
 </body>

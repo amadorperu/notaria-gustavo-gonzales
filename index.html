@@ -852,6 +852,28 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   #n8n-chat .chat-heading {
     font-family: 'Playfair Display', Georgia, serif;
   }
+
+  /* Reposicionar botón del chat n8n para no tapar WhatsApp */
+  #n8n-chat .chat-window-toggle,
+  #n8n-chat .chat-window-wrapper .chat-window-toggle {
+    bottom: 6rem !important;
+    right: 2rem !important;
+  }
+  /* La ventana del chat también sube para no chocar */
+  #n8n-chat .chat-window {
+    bottom: 6rem !important;
+    right: 2rem !important;
+  }
+  @media(max-width:480px){
+    #n8n-chat .chat-window-toggle {
+      bottom: 5.5rem !important;
+      right: 1rem !important;
+    }
+    #n8n-chat .chat-window {
+      bottom: 5.5rem !important;
+      right: 0.75rem !important;
+    }
+  }
 </style>
 
 <script type="module">

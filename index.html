@@ -787,190 +787,97 @@ function handleSubmit(btn){const n=document.getElementById('nombre').value.trim(
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+window.pageYOffset-100,behavior:'smooth'})}})});
 </script>
 
-<!-- ══ CHATBOT NOTARÍA ══ -->
+
+
+
+<!-- ══ CHATBOT NOTARÍA (widget oficial n8n) ══ -->
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 <style>
-  /* Botón flotante del chat */
-  .nchat-fab{position:fixed;bottom:6.5rem;right:2rem;z-index:901;width:60px;height:60px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 24px rgba(196,154,60,.5);transition:transform .25s,box-shadow .25s;border:none}
-  .nchat-fab:hover{transform:scale(1.08) translateY(-2px);box-shadow:0 10px 32px rgba(196,154,60,.6)}
-  .nchat-fab svg{width:28px;height:28px;fill:var(--obsidian)}
-  .nchat-fab .nchat-badge{position:absolute;top:-3px;right:-3px;width:18px;height:18px;background:#e74c3c;border-radius:50%;border:2px solid var(--ivory);animation:nchatPulse 2s infinite}
-  @keyframes nchatPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+  :root {
+    --chat--color-primary: #c49a3c;
+    --chat--color-primary-shade-50: #b88f35;
+    --chat--color-primary-shade-100: #a8822f;
+    --chat--color-secondary: #2b3a52;
+    --chat--color-secondary-shade-50: #243149;
+    --chat--color-white: #ffffff;
+    --chat--color-light: #f8f5ef;
+    --chat--color-light-shade-50: #f0ece4;
+    --chat--color-light-shade-100: #e8e4dc;
+    --chat--color-medium: #b0aaa0;
+    --chat--color-dark: #0f1318;
+    --chat--color-disabled: #7d7870;
+    --chat--color-typing: #2b3a52;
 
-  /* Ventana del chat */
-  .nchat-window{position:fixed;bottom:6.5rem;right:2rem;z-index:902;width:380px;height:560px;max-height:calc(100vh - 9rem);background:var(--ivory);border-radius:18px;box-shadow:0 24px 70px rgba(15,19,24,.4);display:flex;flex-direction:column;overflow:hidden;opacity:0;visibility:hidden;transform:translateY(20px) scale(.96);transform-origin:bottom right;transition:opacity .3s,transform .3s,visibility .3s;border:1px solid rgba(196,154,60,.25)}
-  .nchat-window.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+    --chat--spacing: 1rem;
+    --chat--border-radius: 0.75rem;
+    --chat--transition-duration: 0.2s;
 
-  /* Header */
-  .nchat-header{background:linear-gradient(135deg,var(--obsidian),var(--charcoal));padding:18px 20px;display:flex;align-items:center;gap:13px;flex-shrink:0;position:relative}
-  .nchat-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-  .nchat-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-display);font-weight:700;color:var(--obsidian);font-size:1rem}
-  .nchat-htext{flex:1;min-width:0}
-  .nchat-htitle{font-family:var(--font-display);font-size:1rem;color:var(--white);font-weight:600;line-height:1.2}
-  .nchat-hstatus{font-size:.7rem;color:var(--gold-light);display:flex;align-items:center;gap:5px;margin-top:2px}
-  .nchat-hstatus::before{content:'';width:7px;height:7px;border-radius:50%;background:#2ecc71;box-shadow:0 0 6px #2ecc71}
-  .nchat-close{background:rgba(255,255,255,.1);border:none;width:30px;height:30px;border-radius:50%;color:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;font-size:1.1rem}
-  .nchat-close:hover{background:rgba(255,255,255,.22)}
+    --chat--window--width: 380px;
+    --chat--window--height: 600px;
 
-  /* Cuerpo de mensajes */
-  .nchat-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(180deg,var(--parchment),var(--ivory))}
-  .nchat-body::-webkit-scrollbar{width:5px}
-  .nchat-body::-webkit-scrollbar-thumb{background:rgba(196,154,60,.3);border-radius:3px}
-  .nchat-msg{max-width:80%;padding:11px 15px;border-radius:14px;font-size:.86rem;line-height:1.5;font-family:var(--font-body);animation:nchatIn .3s ease}
-  @keyframes nchatIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-  .nchat-msg.bot{background:var(--white);color:var(--gray-700);align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 2px 8px rgba(15,19,24,.06);white-space:pre-wrap}
-  .nchat-msg.user{background:linear-gradient(135deg,var(--slate),var(--charcoal));color:var(--white);align-self:flex-end;border-bottom-right-radius:4px}
-  .nchat-typing{align-self:flex-start;background:var(--white);padding:13px 16px;border-radius:14px;border-bottom-left-radius:4px;display:flex;gap:4px;box-shadow:0 2px 8px rgba(15,19,24,.06)}
-  .nchat-typing span{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:nchatDot 1.4s infinite}
-  .nchat-typing span:nth-child(2){animation-delay:.2s}
-  .nchat-typing span:nth-child(3){animation-delay:.4s}
-  @keyframes nchatDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+    --chat--header-height: auto;
+    --chat--header--padding: 1.2rem;
+    --chat--header--background: linear-gradient(135deg, #0f1318, #1c2331);
+    --chat--header--color: #ffffff;
+    --chat--header--border-top: none;
+    --chat--header--border-bottom: 2px solid #c49a3c;
+    --chat--heading--font-size: 1.1rem;
+    --chat--subtitle--font-size: 0.8rem;
+    --chat--subtitle--line-height: 1.6;
 
-  /* Sugerencias rápidas */
-  .nchat-quick{display:flex;flex-wrap:wrap;gap:7px;padding:0 18px 12px;background:var(--ivory)}
-  .nchat-chip{background:var(--white);border:1px solid rgba(196,154,60,.35);color:var(--slate);font-family:var(--font-body);font-size:.74rem;padding:7px 13px;border-radius:20px;cursor:pointer;transition:all .2s;white-space:nowrap}
-  .nchat-chip:hover{background:var(--gold);color:var(--obsidian);border-color:var(--gold)}
+    --chat--textarea--height: 50px;
 
-  /* Input */
-  .nchat-input{padding:14px 16px;background:var(--white);border-top:1px solid var(--gray-200);display:flex;gap:10px;align-items:center;flex-shrink:0}
-  .nchat-input input{flex:1;border:1px solid var(--gray-200);border-radius:24px;padding:11px 16px;font-size:.86rem;font-family:var(--font-body);outline:none;transition:border-color .2s;background:var(--parchment)}
-  .nchat-input input:focus{border-color:var(--gold)}
-  .nchat-send{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s}
-  .nchat-send:hover{transform:scale(1.08)}
-  .nchat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
-  .nchat-send svg{width:18px;height:18px;fill:var(--obsidian)}
-  .nchat-footer{text-align:center;font-size:.62rem;color:var(--gray-500);padding:6px;background:var(--white);font-family:var(--font-body)}
+    --chat--message--font-size: 0.9rem;
+    --chat--message--padding: 0.85rem 1.1rem;
+    --chat--message--border-radius: 0.75rem;
+    --chat--message-line-height: 1.5;
+    --chat--message--bot--background: #ffffff;
+    --chat--message--bot--color: #3a3630;
+    --chat--message--bot--border: 1px solid #e8e4dc;
+    --chat--message--user--background: linear-gradient(135deg, #2b3a52, #1c2331);
+    --chat--message--user--color: #ffffff;
+    --chat--message--user--border: none;
+    --chat--message--pre--background: rgba(15, 19, 24, 0.05);
 
-  @media(max-width:480px){
-    .nchat-window{width:calc(100vw - 1.5rem);right:.75rem;bottom:5.5rem;height:calc(100vh - 7rem)}
-    .nchat-fab{right:1rem;bottom:5.5rem}
+    --chat--toggle--background: linear-gradient(135deg, #c49a3c, #d4b060);
+    --chat--toggle--hover--background: #b88f35;
+    --chat--toggle--active--background: #a8822f;
+    --chat--toggle--color: #0f1318;
+    --chat--toggle--size: 60px;
+  }
+  /* Fuentes acordes a la web */
+  #n8n-chat, #n8n-chat * {
+    font-family: 'Jost', sans-serif;
+  }
+  #n8n-chat .chat-heading {
+    font-family: 'Playfair Display', Georgia, serif;
   }
 </style>
 
-<!-- Botón flotante -->
-<button class="nchat-fab" id="nchatFab" aria-label="Abrir chat">
-  <span class="nchat-badge"></span>
-  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.04 2 11c0 2.38 1.02 4.55 2.7 6.18L4 22l5.1-1.34C10.02 20.88 11 21 12 21c5.52 0 10-4.04 10-9s-4.48-10-10-10zm0 16c-.9 0-1.78-.13-2.6-.37l-.5-.15-2.9.76.77-2.8-.18-.5C5.5 13.9 5 12.5 5 11c0-3.31 3.13-6 7-6s7 2.69 7 6-3.13 7-7 7z"/><circle cx="8.5" cy="11" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="15.5" cy="11" r="1.2"/></svg>
-</button>
+<script type="module">
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-<!-- Ventana de chat -->
-<div class="nchat-window" id="nchatWindow" role="dialog" aria-label="Chat de la notaría">
-  <div class="nchat-header">
-    <div class="nchat-avatar">GG</div>
-    <div class="nchat-htext">
-      <div class="nchat-htitle">Asistente Virtual</div>
-      <div class="nchat-hstatus">En línea · Notaría Gonzales</div>
-    </div>
-    <button class="nchat-close" id="nchatClose" aria-label="Cerrar">&times;</button>
-  </div>
-
-  <div class="nchat-body" id="nchatBody">
-    <div class="nchat-msg bot">¡Hola! 👋 Soy el asistente virtual de la Notaría Gustavo Gonzales. ¿En qué trámite notarial puedo ayudarle hoy?</div>
-  </div>
-
-  <div class="nchat-quick" id="nchatQuick">
-    <button class="nchat-chip">Certificaciones</button>
-    <button class="nchat-chip">Autorización de viaje</button>
-    <button class="nchat-chip">Poderes notariales</button>
-    <button class="nchat-chip">Compraventa de inmuebles</button>
-  </div>
-
-  <div class="nchat-input">
-    <input type="text" id="nchatInput" placeholder="Escriba su consulta..." autocomplete="off" />
-    <button class="nchat-send" id="nchatSend" aria-label="Enviar">
-      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-    </button>
-  </div>
-  <div class="nchat-footer">🔒 Conversación segura y confidencial</div>
-</div>
-
-<script>
-(function(){
-  // ⚠️ IMPORTANTE: Cambia esta URL por la de tu n8n PÚBLICO cuando publiques la web
-  const NCHAT_WEBHOOK = 'https://administraciongg.app.n8n.cloud/webhook/5675685d-6e42-4745-b14b-0ec18ab3cdb7/chat';
-
-  const fab = document.getElementById('nchatFab');
-  const win = document.getElementById('nchatWindow');
-  const closeBtn = document.getElementById('nchatClose');
-  const body = document.getElementById('nchatBody');
-  const input = document.getElementById('nchatInput');
-  const send = document.getElementById('nchatSend');
-  const quick = document.getElementById('nchatQuick');
-  const badge = document.querySelector('.nchat-badge');
-
-  const sessionId = 'web_' + Date.now() + '_' + Math.random().toString(36).slice(2,9);
-  let isOpen = false;
-
-  function toggleChat(){
-    isOpen = !isOpen;
-    win.classList.toggle('open', isOpen);
-    if(isOpen){ input.focus(); if(badge) badge.style.display='none'; }
-  }
-  fab.addEventListener('click', toggleChat);
-  closeBtn.addEventListener('click', toggleChat);
-
-  function addMsg(text, who){
-    const div = document.createElement('div');
-    div.className = 'nchat-msg ' + who;
-    div.textContent = text;
-    body.appendChild(div);
-    body.scrollTop = body.scrollHeight;
-  }
-
-  function showTyping(){
-    const t = document.createElement('div');
-    t.className = 'nchat-typing';
-    t.id = 'nchatTyping';
-    t.innerHTML = '<span></span><span></span><span></span>';
-    body.appendChild(t);
-    body.scrollTop = body.scrollHeight;
-  }
-  function hideTyping(){
-    const t = document.getElementById('nchatTyping');
-    if(t) t.remove();
-  }
-
-  async function sendMessage(text){
-    if(!text.trim()) return;
-    addMsg(text, 'user');
-    input.value = '';
-    send.disabled = true;
-    if(quick) quick.style.display = 'none';
-    showTyping();
-
-    try{
-      const res = await fetch(NCHAT_WEBHOOK, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ chatInput: text, sessionId: sessionId, action: 'sendMessage' })
-      });
-      hideTyping();
-      if(res.ok){
-        const data = await res.json();
-        const reply = data.output || data.text || data.message || 'Disculpe, no pude procesar su mensaje. Por favor intente de nuevo.';
-        addMsg(reply, 'bot');
-      } else {
-        addMsg('Disculpe, hubo un problema de conexión. Puede contactarnos al WhatsApp +51 969 767 108.', 'bot');
+  createChat({
+    webhookUrl: 'https://administraciongg.app.n8n.cloud/webhook/5675685d-6e42-4745-b14b-0ec18ab3cdb7/chat',
+    mode: 'window',
+    showWelcomeScreen: false,
+    defaultLanguage: 'en',
+    initialMessages: [
+      '¡Hola! 👋 Soy el asistente virtual de la Notaría Gustavo Gonzales.',
+      '¿En qué trámite notarial puedo ayudarle hoy?'
+    ],
+    i18n: {
+      en: {
+        title: 'Asistente Virtual',
+        subtitle: 'En línea · Notaría Gustavo Gonzales',
+        footer: '🔒 Conversación segura y confidencial',
+        getStarted: 'Nueva conversación',
+        inputPlaceholder: 'Escriba su consulta...',
+        closeButtonTooltip: 'Cerrar'
       }
-    } catch(err){
-      hideTyping();
-      addMsg('Disculpe, no pudimos conectar con el asistente. Contáctenos al WhatsApp +51 969 767 108 o al 01 900 1486.', 'bot');
     }
-    send.disabled = false;
-    input.focus();
-  }
-
-  send.addEventListener('click', ()=> sendMessage(input.value));
-  input.addEventListener('keypress', e=>{ if(e.key==='Enter') sendMessage(input.value); });
-
-  // Chips de sugerencias
-  if(quick){
-    quick.querySelectorAll('.nchat-chip').forEach(chip=>{
-      chip.addEventListener('click', ()=> sendMessage('Quiero información sobre ' + chip.textContent));
-    });
-  }
-})();
+  });
 </script>
-
 
 </body>
 </html>

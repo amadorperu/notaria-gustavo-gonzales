@@ -811,27 +811,27 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     --chat--spacing: 1rem;
     --chat--border-radius: 0.75rem;
     --chat--transition-duration: 0.25s;
-    --chat--window--width: 380px;
-    --chat--window--height: 580px;
+    --chat--window--width: 370px;
+    --chat--window--height: 560px;
     --chat--header-height: auto;
-    --chat--header--padding: 1.2rem;
-    --chat--header--background: linear-gradient(135deg, #0f1318 0%, #1c2331 100%);
+    --chat--header--padding: 1rem 1.2rem;
+    --chat--header--background: transparent;
     --chat--header--color: #ffffff;
     --chat--header--border-top: none;
-    --chat--header--border-bottom: 2px solid #c49a3c;
+    --chat--header--border-bottom: none;
     --chat--heading--font-size: 1.05rem;
     --chat--subtitle--font-size: 0.78rem;
-    --chat--subtitle--line-height: 1.6;
-    --chat--textarea--height: 50px;
+    --chat--subtitle--line-height: 1.5;
+    --chat--textarea--height: 48px;
     --chat--message--font-size: 0.88rem;
-    --chat--message--padding: 0.85rem 1.1rem;
-    --chat--message--border-radius: 0.75rem;
+    --chat--message--padding: 0.82rem 1rem;
+    --chat--message--border-radius: 1rem;
     --chat--message-line-height: 1.55;
     --chat--message--bot--background: #ffffff;
-    --chat--message--bot--color: #3a3630;
+    --chat--message--bot--color: #2c2a27;
     --chat--message--bot--border: 1px solid #e8e4dc;
-    --chat--message--user--background: linear-gradient(135deg, #2b3a52, #1c2331);
-    --chat--message--user--color: #ffffff;
+    --chat--message--user--background: linear-gradient(135deg, #c49a3c 0%, #b88f35 100%);
+    --chat--message--user--color: #0f1318;
     --chat--message--user--border: none;
     --chat--message--pre--background: rgba(15,19,24,.05);
     --chat--toggle--background: linear-gradient(135deg, #c49a3c, #d4b060);
@@ -841,127 +841,225 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     --chat--toggle--size: 56px;
   }
 
-  /* ── Tipografía del chat ── */
+  /* ── Tipografía ── */
   #n8n-chat, #n8n-chat * { font-family: 'Jost', sans-serif; }
-  #n8n-chat .chat-heading { font-family: 'Playfair Display', Georgia, serif; }
 
-  /* ── Ocultar el toggle nativo de n8n (usamos el nuestro) ── */
+  /* ── Ocultar toggle nativo de n8n ── */
   #n8n-chat .chat-window-toggle { display: none !important; }
 
-  /* ── Ventana del chat: posición y animación ── */
+  /* ── Ventana del chat ── */
   #n8n-chat .chat-window {
     position: fixed !important;
-    bottom: 7rem !important;
+    bottom: 7.2rem !important;
     right: 2rem !important;
-    border-radius: 1.1rem !important;
-    box-shadow: 0 12px 48px rgba(0,0,0,.32), 0 2px 8px rgba(196,154,60,.18) !important;
-    border: 1px solid rgba(196,154,60,.22) !important;
+    border-radius: 1.2rem !important;
+    box-shadow: 0 16px 56px rgba(0,0,0,.38), 0 2px 12px rgba(196,154,60,.2) !important;
+    border: 1px solid rgba(196,154,60,.28) !important;
     overflow: hidden !important;
     transform-origin: bottom right !important;
-    animation: chatSlideIn .32s cubic-bezier(.34,1.56,.64,1) both !important;
+    animation: chatSlideIn .3s cubic-bezier(.34,1.45,.64,1) both !important;
   }
   @keyframes chatSlideIn {
-    from { opacity:0; transform:scale(.85) translateY(16px); }
-    to   { opacity:1; transform:scale(1)  translateY(0); }
+    from { opacity:0; transform:scale(.88) translateY(20px); }
+    to   { opacity:1; transform:scale(1)   translateY(0); }
+  }
+
+  /* ── Header del chat: fondo oscuro custom ── */
+  #n8n-chat .chat-header {
+    background: linear-gradient(135deg, #0f1318 0%, #1a2436 100%) !important;
+    border-bottom: 2px solid #c49a3c !important;
+    padding: 0 !important;
+    position: relative !important;
+  }
+
+  /* Ocultar el header nativo de n8n — usaremos el nuestro superpuesto */
+  #n8n-chat .chat-header > * { opacity: 0 !important; pointer-events: none !important; }
+
+  /* ── Mensajes del usuario: dorado + texto oscuro legible ── */
+  #n8n-chat .chat-message.chat-message-from-user .chat-message-bubble {
+    background: linear-gradient(135deg, #c49a3c 0%, #d4b060 100%) !important;
+    color: #0f1318 !important;
+    font-weight: 600 !important;
+    border: none !important;
+  }
+
+  /* ── Área de mensajes ── */
+  #n8n-chat .chat-messages-list {
+    background: #f8f5ef !important;
+    padding: 1rem !important;
+  }
+
+  /* ── Input footer ── */
+  #n8n-chat .chat-input {
+    border-top: 1px solid #e8e4dc !important;
+    background: #ffffff !important;
+    padding: .7rem 1rem !important;
+  }
+  #n8n-chat .chat-input textarea {
+    font-family: 'Jost', sans-serif !important;
+    font-size: .88rem !important;
+  }
+  #n8n-chat .chat-input-send-button {
+    background: #c49a3c !important;
+    color: #0f1318 !important;
+    border-radius: 50% !important;
+    width: 38px !important; height: 38px !important;
+    transition: background .2s ease, transform .15s ease !important;
+  }
+  #n8n-chat .chat-input-send-button:hover {
+    background: #b88f35 !important;
+    transform: scale(1.08) !important;
   }
 
   /* Responsive */
   @media(max-width:480px){
     #n8n-chat .chat-window {
-      right: 0.6rem !important;
-      bottom: 6.5rem !important;
+      right: .6rem !important;
+      bottom: 6.8rem !important;
       --chat--window--width: calc(100vw - 1.2rem);
     }
   }
 
-  /* ── Botón toggle personalizado ── */
+  /* ══ HEADER PERSONALIZADO (overlay sobre el header nativo) ══ */
+  #chat-custom-header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    background: linear-gradient(135deg, #0f1318 0%, #1a2436 100%);
+    border-bottom: 2px solid #c49a3c;
+    padding: .9rem 1.1rem;
+    display: none; /* se muestra con JS cuando abre */
+    align-items: center;
+    gap: .85rem;
+  }
+
+  /* Avatar ícono */
+  #chat-custom-header .ch-avatar {
+    width: 40px; height: 40px; flex-shrink:0;
+    background: linear-gradient(135deg, #c49a3c, #d4b060);
+    border-radius: 50%;
+    display: flex; align-items:center; justify-content:center;
+    font-size: 1.1rem; color: #0f1318;
+    box-shadow: 0 2px 10px rgba(196,154,60,.4);
+  }
+
+  /* Info texto */
+  #chat-custom-header .ch-info { flex:1; min-width:0; }
+  #chat-custom-header .ch-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem; font-weight: 600; color: #fff;
+    line-height: 1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  #chat-custom-header .ch-status {
+    display: flex; align-items:center; gap:.4rem;
+    margin-top:.2rem;
+    font-size: .72rem; color: rgba(255,255,255,.65); font-weight:500;
+  }
+
+  /* Luz verde "En línea" */
+  .ch-dot {
+    width: 8px; height: 8px; flex-shrink:0;
+    border-radius: 50%;
+    background: #2ecc71;
+    box-shadow: 0 0 0 0 rgba(46,204,113,.6);
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%   { box-shadow: 0 0 0 0   rgba(46,204,113,.7); }
+    60%  { box-shadow: 0 0 0 6px rgba(46,204,113,0);  }
+    100% { box-shadow: 0 0 0 0   rgba(46,204,113,0);  }
+  }
+
+  /* Botón X cerrar */
+  #chat-close-btn {
+    width: 32px; height: 32px; flex-shrink:0;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 50%;
+    color: rgba(255,255,255,.8);
+    font-size: .95rem;
+    cursor: pointer;
+    display: flex; align-items:center; justify-content:center;
+    transition: background .18s ease, color .18s ease, transform .15s ease;
+    outline: none;
+  }
+  #chat-close-btn:hover {
+    background: rgba(196,154,60,.25);
+    color: #c49a3c;
+    transform: scale(1.1) rotate(90deg);
+  }
+  #chat-close-btn:active { transform: scale(.92); }
+
+  /* ══ BOTÓN TOGGLE FLOTANTE ══ */
   #chat-toggle-btn {
     position: fixed;
-    bottom: 6rem; /* encima del botón WhatsApp (2rem) + 56px + 0.5rem gap */
+    bottom: 6.1rem;
     right: 2rem;
     z-index: 1100;
-    width: 56px;
-    height: 56px;
+    width: 56px; height: 56px;
     border-radius: 50%;
-    border: none;
+    border: none; outline: none;
     cursor: pointer;
     background: linear-gradient(135deg, #c49a3c 0%, #d4b060 100%);
     box-shadow: 0 4px 18px rgba(196,154,60,.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items:center; justify-content:center;
     transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease;
-    outline: none;
     animation: btnAppear .6s cubic-bezier(.34,1.56,.64,1) .4s both;
   }
   @keyframes btnAppear {
-    from { opacity:0; transform:scale(.5); }
+    from { opacity:0; transform:scale(.4); }
     to   { opacity:1; transform:scale(1); }
   }
-  #chat-toggle-btn:hover {
-    transform: scale(1.12);
-    box-shadow: 0 6px 28px rgba(196,154,60,.72);
-  }
-  #chat-toggle-btn:active { transform: scale(.95); }
+  #chat-toggle-btn:hover { transform:scale(1.12); box-shadow:0 6px 28px rgba(196,154,60,.72); }
+  #chat-toggle-btn:active { transform:scale(.95); }
 
-  /* Icono dentro del botón */
+  /* Íconos animados */
   #chat-toggle-btn .cb-icon {
-    position: absolute;
-    display: flex; align-items:center; justify-content:center;
-    transition: opacity .18s ease, transform .18s ease;
+    position:absolute;
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .2s ease, transform .2s ease;
     color: #0f1318;
-    font-size: 1.45rem;
   }
-  #chat-toggle-btn .cb-icon-open  { opacity:1; transform:scale(1) rotate(0deg); }
-  #chat-toggle-btn .cb-icon-close { opacity:0; transform:scale(.5) rotate(-90deg); font-size:1.25rem; }
+  #chat-toggle-btn .cb-icon-open  { font-size:1.45rem; opacity:1; transform:scale(1) rotate(0); }
+  #chat-toggle-btn .cb-icon-close { font-size:1.2rem;  opacity:0; transform:scale(.5) rotate(-90deg); }
   #chat-toggle-btn.is-open .cb-icon-open  { opacity:0; transform:scale(.5) rotate(90deg); }
-  #chat-toggle-btn.is-open .cb-icon-close { opacity:1; transform:scale(1) rotate(0deg); }
+  #chat-toggle-btn.is-open .cb-icon-close { opacity:1; transform:scale(1) rotate(0); }
 
-  /* Ping pulsante cuando está cerrado */
+  /* Pulso dorado */
   #chat-toggle-btn::before {
-    content:'';
-    position:absolute; inset:-4px;
+    content:''; position:absolute; inset:-5px;
     border-radius:50%;
-    background: rgba(196,154,60,.22);
-    animation: ctPulse 2.6s ease-in-out infinite;
+    background: rgba(196,154,60,.18);
+    animation: ctPulse 2.8s ease-in-out infinite;
     pointer-events:none;
   }
-  #chat-toggle-btn.is-open::before { animation:none; opacity:0; }
+  #chat-toggle-btn.is-open::before { opacity:0; animation:none; }
   @keyframes ctPulse {
-    0%,100%{ transform:scale(1);   opacity:.7; }
-    50%    { transform:scale(1.25);opacity:0; }
+    0%,100%{ transform:scale(1);    opacity:.8; }
+    55%    { transform:scale(1.28); opacity:0;  }
   }
 
   /* Tooltip */
   #chat-toggle-btn::after {
     content: attr(data-tip);
-    position:absolute;
-    right: 68px; top:50%; transform:translateY(-50%);
-    background: #0f1318;
-    color: #fff;
-    font-family: 'Jost', sans-serif;
-    font-size: .72rem; font-weight:600;
-    white-space:nowrap;
-    padding:.42rem .85rem;
-    border-radius:.4rem;
-    border:1px solid rgba(196,154,60,.25);
-    opacity:0; pointer-events:none;
-    transition:opacity .2s ease;
+    position:absolute; right:68px; top:50%; transform:translateY(-50%);
+    background:#0f1318; color:#fff;
+    font-family:'Jost',sans-serif; font-size:.72rem; font-weight:600;
+    white-space:nowrap; padding:.42rem .88rem;
+    border-radius:.4rem; border:1px solid rgba(196,154,60,.25);
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
   }
   #chat-toggle-btn:hover::after { opacity:1; }
   #chat-toggle-btn.is-open::after { content:'Cerrar asistente'; }
 
-  /* Notificación badge */
+  /* Badge notificación */
   #chat-badge {
-    position:absolute;
-    top:-4px; right:-4px;
+    position:absolute; top:-4px; right:-4px;
     width:18px; height:18px;
-    background:#e63946;
-    border-radius:50%;
-    border:2px solid #fff;
+    background:#e63946; border-radius:50%; border:2px solid #fff;
     font-size:.6rem; font-weight:700; color:#fff;
     display:flex; align-items:center; justify-content:center;
-    animation:badgePop .4s cubic-bezier(.34,1.56,.64,1) 1.8s both;
+    animation:badgePop .4s cubic-bezier(.34,1.56,.64,1) 2s both;
     pointer-events:none;
   }
   @keyframes badgePop {
@@ -970,13 +1068,27 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
   }
   #chat-badge.hidden { display:none; }
 
-  /* Mobile */
   @media(max-width:480px){
     #chat-toggle-btn { right:.9rem; bottom:5.8rem; }
   }
 </style>
 
-<!-- Botón personalizado -->
+<!-- ── Header personalizado (se inserta dentro de .chat-window vía JS) ── -->
+<div id="chat-custom-header">
+  <div class="ch-avatar"><i class="fas fa-balance-scale"></i></div>
+  <div class="ch-info">
+    <div class="ch-title">Asistente Virtual</div>
+    <div class="ch-status">
+      <span class="ch-dot"></span>
+      En línea · Notaría Gustavo Gonzales
+    </div>
+  </div>
+  <button id="chat-close-btn" aria-label="Cerrar chat">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<!-- ── Botón flotante ── -->
 <button id="chat-toggle-btn" data-tip="Asistente virtual" aria-label="Abrir asistente virtual" aria-expanded="false">
   <span class="cb-icon cb-icon-open"><i class="fas fa-comment-dots"></i></span>
   <span class="cb-icon cb-icon-close"><i class="fas fa-times"></i></span>
@@ -1007,30 +1119,38 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     }
   });
 
-  // Control manual del toggle
-  const btn   = document.getElementById('chat-toggle-btn');
-  const badge = document.getElementById('chat-badge');
-
-  function getChatWindow() {
-    return document.querySelector('#n8n-chat .chat-window');
-  }
-  function getNativeToggle() {
-    return document.querySelector('#n8n-chat .chat-window-toggle, #n8n-chat button[class*="toggle"]');
-  }
-
+  /* ── Lógica del toggle y header custom ── */
+  const toggleBtn   = document.getElementById('chat-toggle-btn');
+  const badge       = document.getElementById('chat-badge');
+  const customHdr   = document.getElementById('chat-custom-header');
+  const closeBtn    = document.getElementById('chat-close-btn');
   let isOpen = false;
+
+  function getChatWindow()  { return document.querySelector('#n8n-chat .chat-window'); }
+  function getNativeToggle(){ return document.querySelector('#n8n-chat .chat-window-toggle, #n8n-chat button[class*="toggle"]'); }
+
+  function injectHeader(win) {
+    if (!win || win.contains(customHdr)) return;
+    // Insertar al principio de la ventana
+    win.insertBefore(customHdr, win.firstChild);
+    customHdr.style.display = 'flex';
+  }
 
   function openChat() {
     const native = getNativeToggle();
-    // Usamos el toggle nativo de n8n si está disponible; de lo contrario forzamos visibilidad
     if (native) native.click();
+    const win = getChatWindow();
+    if (win) { win.style.display = ''; win.style.visibility = 'visible'; injectHeader(win); }
     else {
-      const win = getChatWindow();
-      if (win) { win.style.display = ''; win.style.visibility = 'visible'; }
+      // Espera a que el DOM renderice el chat
+      setTimeout(() => {
+        const w = getChatWindow();
+        if (w) injectHeader(w);
+      }, 200);
     }
     isOpen = true;
-    btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded','true');
+    toggleBtn.classList.add('is-open');
+    toggleBtn.setAttribute('aria-expanded','true');
     badge.classList.add('hidden');
   }
 
@@ -1042,15 +1162,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
       if (win) win.style.display = 'none';
     }
     isOpen = false;
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded','false');
+    toggleBtn.classList.remove('is-open');
+    toggleBtn.setAttribute('aria-expanded','false');
   }
 
-  btn.addEventListener('click', () => {
-    if (isOpen) closeChat(); else openChat();
-  });
-
-  // Cerrar con Escape
+  toggleBtn.addEventListener('click', () => { if (isOpen) closeChat(); else openChat(); });
+  closeBtn.addEventListener('click',  () => closeChat());
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen) closeChat(); });
 </script>
 

@@ -1,0 +1,10 @@
+const header=document.querySelector('.header');
+const menuBtn=document.querySelector('.menu-btn');
+const navlinks=document.querySelector('.navlinks');
+const onScroll=()=>header.classList.toggle('scrolled',window.scrollY>12);
+onScroll();window.addEventListener('scroll',onScroll,{passive:true});
+menuBtn?.addEventListener('click',()=>{navlinks.classList.toggle('open');document.body.classList.toggle('menu-open')});
+document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>{navlinks.classList.remove('open');document.body.classList.remove('menu-open')}));
+const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()=>{const item=btn.closest('.faq-item');document.querySelectorAll('.faq-item').forEach(x=>{if(x!==item)x.classList.remove('open')});item.classList.toggle('open')}));
